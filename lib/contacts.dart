@@ -1,100 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
-import 'package:phone_demo/tab_bar.dart';
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  bool hasPermission = await FlutterContacts.requestPermission();
-  runApp(MyApp(permissionGranted: hasPermission));
-}
-
-class MyApp extends StatelessWidget {
-  final bool permissionGranted;
-
-  const MyApp({Key? key, required this.permissionGranted}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: permissionGranted ? ContactPickerPage() : PermissionDeniedPage(),
-    );
-  }
-}
 
 class ContactPickerPage extends StatefulWidget {
+  const ContactPickerPage({Key? key}) : super(key: key);
+
   @override
   _ContactPickerPageState createState() => _ContactPickerPageState();
 }
 
 class _ContactPickerPageState extends State<ContactPickerPage> {
   List<Contact> _contacts = [];
+  bool _permissionChecked = false;
+  bool _permissionGranted = false;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Contact Picker'),
-      ),
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              ElevatedButton(
-                onPressed: () async {
-                  final contacts = await FlutterContacts.getContacts(
-                    withProperties: true,
-                  );
-                  setState(() {
-                    _contacts = contacts;
-                  });
-                },
-                child: const Text('Pick Contacts'),
-              ),
-              const SizedBox(height: 20),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _contacts.length,
-                  itemBuilder: (context, index) {
-                    final contact = _contacts[index];
-                    return ListTile(
-                      title: Text(contact.displayName ?? 'No Name'),
-                      subtitle: Text(contact.phones.isNotEmpty
-                          ? contact.phones.first.number
-                          : 'No Number'),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-          Positioned(
-            bottom: 1,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: TapBar(),
-            ),
-          ),
-        ],
-      ),
-    );
+  void initState() {
+    super.initState();
+    _requestPermission();
   }
-}
 
-class PermissionDeniedPage extends StatelessWidget {
+  Future<void> _requestPermission() async {
+    final hasPermission = await FlutterContacts.requestPermission();
+    setState(() {
+      _permissionChecked = true;
+      _permissionGranted = hasPermission;
+    });
+
+    if (hasPermission) {
+      _fetchContacts();
+    }
+  }
+
+  Future<void> _fetchContacts() async {
+    final contacts = await FlutterContacts.getContacts(withProperties: true);
+    setState(() {
+      _contacts = contacts;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Permission Denied'),
-      ),
-      body: Center(
+    if (!_permissionChecked) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (!_permissionGranted) {
+      return const Center(
         child: Text(
-          'Contacts permission is required to use this app.',
+          'Contacts permission is required to use this feature.',
           textAlign: TextAlign.center,
         ),
-      ),
+      );
+    }
+
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: _contacts.length,
+            itemBuilder: (context, index) {
+              final contact = _contacts[index];
+              return ListTile(
+                title: Text(contact.displayName ?? 'No Name'),
+                subtitle: Text(contact.phones.isNotEmpty
+                    ? contact.phones.first.number
+                    : 'No Number'),
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
