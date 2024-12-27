@@ -32,7 +32,7 @@ class _MainPageState extends State<MainPage> {
 
   final List<Widget> _pages = [
     const ContactPickerPage(),
-    const TopCafesScreen(),
+    const CafeListScreen(),
     const PinterestUI(),
   ];
 

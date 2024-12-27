@@ -70,6 +70,32 @@ flutter:
   uses-material-design: true
   assets:
     - assets/cafein_logo.png
+    - assets/music.png
+    - assets/study.png
+    - assets/dessert.png
+    - assets/pet-friendly.png
+    - assets/late hours.png
+    - assets/spacious.png
+    - assets/12o1.jpg
+    - assets/aight1.jpeg
+    - assets/aight2.jpg
+    - assets/cafe nuovo1.jpg
+    - assets/cafe nuovo2.jpg
+    - assets/friand1.jpg
+    - assets/friand2.jpg
+    - assets/gabae1.jpeg
+    - assets/gabae2.jpg
+    - assets/glory days1.jpg
+    - assets/oasis1.jpg
+    - assets/oasis2.jpg
+    - assets/ooo1.jpg
+    - assets/ooo2.jpeg
+    - assets/ooo3.jpg
+    - assets/ravic1.jpg
+    - assets/sosin1.jpg
+    - assets/sosin2.jpeg
+    - assets/yusungstar1.jpg
+    - assets/yusungstar2.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:
