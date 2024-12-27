@@ -33,7 +33,7 @@ class _MainPageState extends State<MainPage> {
   final List<Widget> _pages = [
     const ContactPickerPage(),
     const CafeListScreen(),
-    const PinterestUI(),
+    PinterestUI(),
   ];
 
   @override
