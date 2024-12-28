@@ -13,8 +13,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Cafe and Gallery',
-      theme: ThemeData(primarySwatch: Colors.teal),
+      debugShowCheckedModeBanner: false,
+      title: 'Cafe-in App',
+      theme: ThemeData(primarySwatch: Colors.brown),
       home: const MainPage(),
     );
   }
@@ -39,9 +40,6 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Cafe and Gallery'),
-      ),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,

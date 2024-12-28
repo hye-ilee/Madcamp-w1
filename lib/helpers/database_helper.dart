@@ -93,4 +93,14 @@ class DatabaseHelper {
     );
     return result;
   }
+
+  Future<List<Map<String, dynamic>>> searchCafes(String query) async {
+    final db = await instance.database;
+    final result = await db.query(
+      'cafes',
+      where: 'name LIKE ? OR menus LIKE ?',
+      whereArgs: ['%$query%', '%$query%'],
+    );
+    return result;
+  }
 }

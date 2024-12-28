@@ -33,7 +33,7 @@ class PinterestUI extends StatelessWidget {
         child: AppBar(
           backgroundColor: Colors.white,
           flexibleSpace: Padding(
-            padding: const EdgeInsets.only(top: 0),
+            padding: const EdgeInsets.only(top: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -41,7 +41,7 @@ class PinterestUI extends StatelessWidget {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
-                const Text( '클릭 수가 높은 카페 사진을 모아봤어요.',
+                const Text( '좋아하실 만한 카페 사진을 모아봤어요.',
                   style: TextStyle(fontSize: 14, color: Colors.black54),
                 ),
                 const SizedBox(height: 2),
