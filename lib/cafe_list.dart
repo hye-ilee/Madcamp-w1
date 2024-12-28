@@ -10,7 +10,67 @@ class CafeListScreen extends StatefulWidget {
 
 class _CafeListScreenState extends State<CafeListScreen> {
   late Future<List<Map<String, dynamic>>> _topCafes;
+  final TextEditingController _searchController = TextEditingController();//검색 textfield의 text 가져오기
 
+  List<Map<String, dynamic>> _searchResults = [];
+  Future<void> _searchCafes(String query) async {
+    if(query.isEmpty){
+      setState(() {
+        _searchResults = [];
+      });
+      return;
+    }
+    final results = await DatabaseHelper.instance.searchCafes(query);
+    setState(() {
+      _searchResults = results;
+    });
+    if(results.isNotEmpty){
+      _resultsPopup(results);
+    }
+  }
+  
+  void _resultsPopup(List<Map<String, dynamic>> cafes) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('검색 결과'),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: cafes.length,
+                itemBuilder: (context, index) {
+                  final cafe = cafes[index];
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: ListTile(
+                      title: Text(cafe['name']),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('메뉴: ${cafe['menus']}'),
+                          Text('연락처: ${cafe['phone']}'),
+                          Text('위치: ${cafe['location']}'),
+                        ],
+                      ),
+                      isThreeLine: true,
+                    ),
+                  );
+                },
+              ),
+            ),
+          actions: [
+            TextButton(onPressed: () {
+              Navigator.of(context).pop();
+              },
+              child: const Text('close')
+            ),
+          ],
+        );
+      },
+    );
+  }
   final List<Map<String, String>> categories = [
     {'image': 'assets/music.png', 'label': '음악이 좋은'},
     {'image': 'assets/study.png', 'label': '공부하기 좋은'},
@@ -53,7 +113,9 @@ class _CafeListScreenState extends State<CafeListScreen> {
         children: [
           Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+
+            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -71,12 +133,32 @@ class _CafeListScreenState extends State<CafeListScreen> {
                   decoration: InputDecoration(
                     hintText: '오늘 내가 가고 싶은 카페는?',
                     hintStyle: const TextStyle(color: Colors.grey),
+                    suffixIcon: IconButton(onPressed: () {
+                      _searchCafes(_searchController.text);
+                      },
+                      icon: const Icon(Icons.search),
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12.0),
                       borderSide: BorderSide.none,
                     ),
                     filled: true,
                     fillColor: Colors.grey.shade200,
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _searchResults.length,
+                    itemBuilder: (context, index) {
+                      final cafes = _searchResults;
+                      return ListTile(
+                        title: Text(cafes[index]['name']),
+                        onTap: () {
+                          _resultsPopup(cafes);
+                        },
+                      );
+                    },
                   ),
                 ),
               ],

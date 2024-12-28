@@ -27,7 +27,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.teal),
+      title: 'Cafe-in App',
+      theme: ThemeData(primarySwatch: Colors.brown),
       home: const MainPage(),
     );
   }
