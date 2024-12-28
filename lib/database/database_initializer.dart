@@ -14,6 +14,7 @@ class DatabaseInitializer {
       'jjim_list': '[]' // Stored as a JSON string
     };
     await DatabaseHelper.instance.insertUserInfo(userInfo);
+    print('User info inserted.');
 
     final sampleCafes = [
       {
@@ -90,6 +91,7 @@ class DatabaseInitializer {
     // Insert sample cafes into the database
     for (var cafe in sampleCafes) {
       await DatabaseHelper.instance.insertCafe(cafe);
+      print('Cafe inserted: ${cafe['name']}');
     }
   }
 }

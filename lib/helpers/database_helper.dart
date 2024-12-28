@@ -77,12 +77,25 @@ class DatabaseHelper {
     db.close();
   }
 
+  Future<void> debugDatabase() async {
+    final db = await database;
+
+    // 테이블 목록 확인
+    final tables =
+        await db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'");
+    print('Tables: $tables');
+
+    // cafes 테이블 내용 확인
+    final cafes = await db.query('cafes');
+    print('Cafes data: $cafes');
+  }
+
   Future<int> updateUserInfo(Map<String, dynamic> userInfo) async {
     final db = await database;
     return await db.update(
       'user_info',
       userInfo,
-      where: 'id = 1',
+      where: 'id = ?',
       whereArgs: [userInfo['id']],
     );
   }

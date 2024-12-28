@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-import 'package:phone_demo/database/database_initializer.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:phone_demo/helpers/databse_util.dart';
 import 'cafe_list.dart';
 import 'contacts.dart';
 import 'my_gallery.dart';
@@ -9,13 +7,8 @@ import 'my_gallery.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Delete the existing database
-  final dbPath = await getDatabasesPath();
-  final path = join(dbPath, 'cafes.db');
-  await deleteDatabase(path); // Delete the existing database file
-
-  // Initialize the database with the correct schema
-  await DatabaseInitializer.initializeDatabase();
+  // 필요할 때만 데이터베이스 초기화
+  await initializeDatabaseIfNeeded();
 
   runApp(MyApp());
 }
