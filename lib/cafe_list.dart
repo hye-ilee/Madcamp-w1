@@ -83,7 +83,27 @@ class _CafeListScreenState extends State<CafeListScreen> {
   @override
   void initState() {
     super.initState();
-    _topCafes = DatabaseHelper.instance.getTopCafesByMusicScore();
+    _topCafes =
+        DatabaseHelper.instance.getTopCafesByMusicScore(); // Default sort
+  }
+
+  String? _getFieldNameByCategoryLabel(String label) {
+    switch (label) {
+      case '음악이 좋은':
+        return 'music';
+      case '공부하기 좋은':
+        return 'study';
+      case '디저트 맛집':
+        return 'dessert';
+      case '반려견 동반':
+        return 'pet';
+      case '늦게까지 하는':
+        return 'time';
+      case '공간이 넓은':
+        return 'space';
+      default:
+        return null;
+    }
   }
 
   @override
@@ -91,10 +111,11 @@ class _CafeListScreenState extends State<CafeListScreen> {
     return Scaffold(
       body: Column(
         children: [
-          // Categories Section
           Padding(
             padding:
+
             const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -146,16 +167,13 @@ class _CafeListScreenState extends State<CafeListScreen> {
           Expanded(
             child: ListView(
               children: [
-                // Grid of Categories
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GridView.builder(
-                    shrinkWrap:
-                    true, // Allow GridView to take only necessary space
-                    physics:
-                    const NeverScrollableScrollPhysics(), // Prevent inner scrolling
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
                     gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       crossAxisSpacing: 8.0,
                       mainAxisSpacing: 8.0,
@@ -164,12 +182,36 @@ class _CafeListScreenState extends State<CafeListScreen> {
                     itemBuilder: (context, index) {
                       final category = categories[index];
                       return GestureDetector(
-                        onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content:
-                                Text('#${category['label']} 카테고리 선택됨!')),
-                          );
+                        onTap: () async {
+                          final fieldName =
+                              _getFieldNameByCategoryLabel(category['label']!);
+                          if (fieldName != null) {
+                            await DatabaseHelper.instance.incrementUserCount(
+                                '${fieldName}_cnt'); // Increment user's category count
+
+                            final userInfo = await DatabaseHelper.instance
+                                .fetchUserInfo(1); // Ensure user info exists
+                            if (userInfo != null) {
+                              final userCntField = '${fieldName}_cnt';
+                              final userCnt = userInfo[userCntField] ??
+                                  1; // Default to 1 if null
+
+                              setState(() {
+                                _topCafes = DatabaseHelper.instance
+                                    .getTopCafesByCategory(fieldName, userCnt);
+                              });
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    content: Text(
+                                        '${category['label']} 기준으로 카페를 정렬합니다.')),
+                              );
+                            }
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('잘못된 카테고리 선택입니다.')),
+                            );
+                          }
                         },
                         child: Column(
                           children: [
@@ -192,7 +234,6 @@ class _CafeListScreenState extends State<CafeListScreen> {
                   ),
                 ),
                 const SizedBox(height: 16.0),
-                // Cafes List Section
                 FutureBuilder<List<Map<String, dynamic>>>(
                   future: _topCafes,
                   builder: (context, snapshot) {
@@ -205,16 +246,13 @@ class _CafeListScreenState extends State<CafeListScreen> {
                     } else {
                       final cafes = snapshot.data!;
                       return ListView.builder(
-                        shrinkWrap:
-                        true, // Allow ListView to take only necessary space
-                        physics:
-                        const NeverScrollableScrollPhysics(), // Prevent inner scrolling
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: cafes.length,
                         itemBuilder: (context, index) {
                           final cafe = cafes[index];
                           return ListTile(
                             title: Text(cafe['name']),
-                            subtitle: Text('Music Score: ${cafe['music']}'),
                             trailing: Text('Location: ${cafe['location']}'),
                           );
                         },

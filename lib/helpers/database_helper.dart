@@ -27,32 +27,90 @@ class DatabaseHelper {
   }
 
   Future<void> _createDB(Database db, int version) async {
-    const idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
-    const textType = 'TEXT NOT NULL';
-    const integerType = 'INTEGER NOT NULL';
+    print('Executing _createDB...');
 
     await db.execute('''
-      CREATE TABLE cafes (
-        id $idType,
-        name $textType,
-        menus $textType,
-        images $textType,
-        kakao_id $textType,
-        phone $textType,
-        location $textType,
-        music $integerType,
-        study $integerType,
-        dessert $integerType,
-        pet $integerType,
-        space $integerType,
-        time $integerType
-      )
-    ''');
+    CREATE TABLE cafes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      menus TEXT NOT NULL,
+      images TEXT NOT NULL,
+      kakao_id TEXT NOT NULL,
+      phone TEXT NOT NULL,
+      location TEXT NOT NULL,
+      music INTEGER NOT NULL,
+      study INTEGER NOT NULL,
+      dessert INTEGER NOT NULL,
+      pet INTEGER NOT NULL,
+      space INTEGER NOT NULL,
+      time INTEGER NOT NULL
+    )
+  ''');
+    print('Created cafes table.');
+
+    await db.execute('''
+    CREATE TABLE user_info (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      music_cnt INTEGER NOT NULL,
+      study_cnt INTEGER NOT NULL,
+      dessert_cnt INTEGER NOT NULL,
+      pet_cnt INTEGER NOT NULL,
+      space_cnt INTEGER NOT NULL,
+      time_cnt INTEGER NOT NULL,
+      profile_img TEXT NOT NULL,
+      jjim_list TEXT NOT NULL
+    )
+  ''');
+    print('Created user_info table.');
+  }
+
+  Future<void> debugTables() async {
+    final db = await DatabaseHelper.instance.database;
+    final result =
+        await db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'");
+    print('Tables: $result');
   }
 
   Future<void> close() async {
     final db = await database;
     db.close();
+  }
+
+  Future<int> updateUserInfo(Map<String, dynamic> userInfo) async {
+    final db = await database;
+    return await db.update(
+      'user_info',
+      userInfo,
+      where: 'id = 1',
+      whereArgs: [userInfo['id']],
+    );
+  }
+
+  Future<Map<String, dynamic>?> fetchUserInfo(int id) async {
+    final db = await database;
+    final result = await db.query(
+      'user_info',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    return result.isNotEmpty ? result.first : null;
+  }
+
+  Future<int> insertUserInfo(Map<String, dynamic> userInfo) async {
+    final db = await database;
+    return await db.insert('user_info', userInfo);
+  }
+
+  Future<void> incrementUserCount(String countField) async {
+    final db = await database;
+
+    // Ensure the field exists in the user_info table
+    await db.rawUpdate('''
+    UPDATE user_info
+    SET $countField = $countField + 1
+    WHERE id = 1
+  '''); // Assuming user ID is 1 for now.
   }
 
   Future<int> insertCafe(Map<String, dynamic> cafe) async {
@@ -69,7 +127,7 @@ class DatabaseHelper {
     final db = await database;
     return await db.delete(
       'cafes',
-      where: 'id = ?',
+      where: 'id = 1',
       whereArgs: [id],
     );
   }
@@ -89,10 +147,11 @@ class DatabaseHelper {
     final result = await db.query(
       'cafes',
       orderBy: 'music DESC',
-      limit: 1,
+      limit: 5,
     );
     return result;
   }
+
 
   Future<List<Map<String, dynamic>>> searchCafes(String query) async {
     final db = await instance.database;
@@ -101,6 +160,21 @@ class DatabaseHelper {
       where: 'name LIKE ? OR menus LIKE ?',
       whereArgs: ['%$query%', '%$query%'],
     );
+  return result;
+  }
+
+  Future<List<Map<String, dynamic>>> getTopCafesByCategory(
+      String scoreField, int userCnt) async {
+    final db = await database;
+
+    final result = await db.rawQuery('''
+    SELECT *,
+          ($scoreField * $userCnt) AS weighted_score
+    FROM cafes
+    ORDER BY weighted_score DESC
+    LIMIT 5
+  ''');
+
     return result;
   }
 }

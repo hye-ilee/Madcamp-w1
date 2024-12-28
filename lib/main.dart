@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:phone_demo/database/database_initializer.dart';
+import 'package:sqflite/sqflite.dart';
 import 'cafe_list.dart';
 import 'contacts.dart';
 import 'my_gallery.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Delete the existing database
+  final dbPath = await getDatabasesPath();
+  final path = join(dbPath, 'cafes.db');
+  await deleteDatabase(path); // Delete the existing database file
+
+  // Initialize the database with the correct schema
+  await DatabaseInitializer.initializeDatabase();
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

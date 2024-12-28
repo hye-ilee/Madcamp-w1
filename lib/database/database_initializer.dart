@@ -2,6 +2,19 @@ import 'package:phone_demo/helpers/database_helper.dart';
 
 class DatabaseInitializer {
   static Future<void> initializeDatabase() async {
+    final userInfo = {
+      'name': '형원',
+      'music_cnt': 1,
+      'study_cnt': 0,
+      'dessert_cnt': 0,
+      'pet_cnt': 0,
+      'space_cnt': 0,
+      'time_cnt': 0,
+      'profile_img': 'profile_image.png',
+      'jjim_list': '[]' // Stored as a JSON string
+    };
+    await DatabaseHelper.instance.insertUserInfo(userInfo);
+
     final sampleCafes = [
       {
         'name': 'Cafe 1',
@@ -45,8 +58,35 @@ class DatabaseInitializer {
         'space': 6,
         'time': 9,
       },
+      {
+        'name': 'Cafe 4',
+        'menus': 'Latte, pudding, cheesecake',
+        'images': 'image7.jpg,image8.jpg',
+        'kakao_id': '183473',
+        'phone': '010-6235-2646',
+        'location': 'Seoul, Korea',
+        'music': 5,
+        'study': 10,
+        'dessert': 7,
+        'pet': 8,
+        'space': 5,
+        'time': 9,
+      },
+      {
+        'name': 'Cafe 5',
+        'menus': 'Americano, cookie',
+        'images': 'image9.jpg,image10.jpg',
+        'kakao_id': '164543',
+        'phone': '010-2464-1346',
+        'location': 'Seoul, Korea',
+        'music': 10,
+        'study': 5,
+        'dessert': 7,
+        'pet': 8,
+        'space': 7,
+        'time': 8,
+      },
     ];
-
     // Insert sample cafes into the database
     for (var cafe in sampleCafes) {
       await DatabaseHelper.instance.insertCafe(cafe);
