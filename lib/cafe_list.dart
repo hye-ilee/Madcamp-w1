@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:phone_demo/helpers/database_helper.dart';
+import 'package:phone_demo/helpers/kakao_map_helper.dart';
 
 class CafeListScreen extends StatefulWidget {
   const CafeListScreen({Key? key}) : super(key: key);
@@ -10,11 +11,12 @@ class CafeListScreen extends StatefulWidget {
 
 class _CafeListScreenState extends State<CafeListScreen> {
   late Future<List<Map<String, dynamic>>> _topCafes;
-  final TextEditingController _searchController = TextEditingController();//검색 textfield의 text 가져오기
+  final TextEditingController _searchController =
+      TextEditingController(); //검색 textfield의 text 가져오기
 
   List<Map<String, dynamic>> _searchResults = [];
   Future<void> _searchCafes(String query) async {
-    if(query.isEmpty){
+    if (query.isEmpty) {
       setState(() {
         _searchResults = [];
       });
@@ -24,11 +26,12 @@ class _CafeListScreenState extends State<CafeListScreen> {
     setState(() {
       _searchResults = results;
     });
-    if(results.isNotEmpty){
+    print(_searchResults);
+    if (results.isNotEmpty) {
       _resultsPopup(results);
     }
   }
-  
+
   void _resultsPopup(List<Map<String, dynamic>> cafes) {
     showDialog(
       context: context,
@@ -38,39 +41,85 @@ class _CafeListScreenState extends State<CafeListScreen> {
           content: SizedBox(
             width: double.maxFinite,
             child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: cafes.length,
-                itemBuilder: (context, index) {
-                  final cafe = cafes[index];
-                  return Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: ListTile(
-                      title: Text(cafe['name']),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('메뉴: ${cafe['menus']}'),
-                          Text('연락처: ${cafe['phone']}'),
-                          Text('위치: ${cafe['location']}'),
-                        ],
-                      ),
-                      isThreeLine: true,
+              shrinkWrap: true,
+              itemCount: cafes.length,
+              itemBuilder: (context, index) {
+                final cafe = cafes[index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: ListTile(
+                    title: Text(cafe['name']),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('메뉴: ${cafe['menus']}'),
+                        Text('연락처: ${cafe['phone']}'),
+                        Text('위치: ${cafe['location']}'),
+                      ],
                     ),
-                  );
-                },
-              ),
-            ),
-          actions: [
-            TextButton(onPressed: () {
-              Navigator.of(context).pop();
+                    isThreeLine: true,
+                  ),
+                );
               },
-              child: const Text('close')
+            ),
+          ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('close')),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showCafeDetails(Map<String, dynamic> cafe) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(cafe['name']),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                cafe['images'] != null
+                    ? Image.network(cafe['images'], fit: BoxFit.cover)
+                    : const SizedBox.shrink(),
+                const SizedBox(height: 10),
+                Text('Phone: ${cafe['phone'] ?? 'Not available'}'),
+                Text('Location: ${cafe['location'] ?? 'Not available'}'),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Close'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  await KakaoMapHelper.openKakaoPlaceWithId(
+                      cafe['kakao_id']); // Pass as positional argument
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Could not open Kakao Map')),
+                  );
+                }
+              },
+              child: const Text('경로'),
             ),
           ],
         );
       },
     );
   }
+
   final List<Map<String, String>> categories = [
     {'image': 'assets/music.png', 'label': '음악이 좋은'},
     {'image': 'assets/study.png', 'label': '공부하기 좋은'},
@@ -113,9 +162,7 @@ class _CafeListScreenState extends State<CafeListScreen> {
         children: [
           Padding(
             padding:
-
-            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
-
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -133,8 +180,9 @@ class _CafeListScreenState extends State<CafeListScreen> {
                   decoration: InputDecoration(
                     hintText: '오늘 내가 가고 싶은 카페는?',
                     hintStyle: const TextStyle(color: Colors.grey),
-                    suffixIcon: IconButton(onPressed: () {
-                      _searchCafes(_searchController.text);
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        _searchCafes(_searchController.text);
                       },
                       icon: const Icon(Icons.search),
                     ),
@@ -147,8 +195,10 @@ class _CafeListScreenState extends State<CafeListScreen> {
                   ),
                 ),
                 const SizedBox(height: 16.0),
-                Expanded(
+                SizedBox(
+                  height: 10, // 적절한 높이 설정
                   child: ListView.builder(
+                    shrinkWrap: true,
                     itemCount: _searchResults.length,
                     itemBuilder: (context, index) {
                       final cafes = _searchResults;
@@ -253,7 +303,10 @@ class _CafeListScreenState extends State<CafeListScreen> {
                           final cafe = cafes[index];
                           return ListTile(
                             title: Text(cafe['name']),
-                            trailing: Text('Location: ${cafe['location']}'),
+                            trailing: const Icon(
+                                Icons.arrow_forward), // Add an icon for clarity
+                            onTap: () =>
+                                _showCafeDetails(cafe), // Show the popup on tap
                           );
                         },
                       );

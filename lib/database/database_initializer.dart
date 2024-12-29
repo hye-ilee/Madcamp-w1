@@ -18,18 +18,18 @@ class DatabaseInitializer {
 
     final sampleCafes = [
       {
-        'name': 'Cafe 1',
-        'menus': 'Latte, Espresso, Tiramisu',
+        'name': '프리앙',
+        'menus': 'Latte, Espresso, ddalgi_cake',
         'images': 'image1.jpg,image2.jpg',
-        'kakao_id': '123456',
-        'phone': '010-1234-5678',
+        'kakao_id': '2044764824',
+        'phone': '070-8671-2334',
         'location': 'Seoul, Korea',
-        'music': 8,
-        'study': 9,
+        'music': 10,
+        'study': 10,
         'dessert': 10,
-        'pet': 6,
-        'space': 7,
-        'time': 5,
+        'pet': 10,
+        'space': 10,
+        'time': 10,
       },
       {
         'name': 'Cafe 2',
