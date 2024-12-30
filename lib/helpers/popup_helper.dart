@@ -37,7 +37,8 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                 ),
                 onPressed: () async {
                   setState(() {
-                    isFavorite = jjims.contains(cafe['kakao_id']) ? false : true;
+                    isFavorite =
+                        jjims.contains(cafe['kakao_id']) ? false : true;
                   });
 
                   // Update jjim_list in the database
@@ -48,7 +49,7 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                   }
 
                   // Update user info in the database
-                  if(userInfo != null) {
+                  if (userInfo != null) {
                     userInfo["jjim_list"] = jsonEncode(jjims);
                     await DatabaseHelper.instance.updateUserInfo(userInfo);
                     // print('3 jjim list: ${userInfo["jjim_list"]}');

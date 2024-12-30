@@ -86,20 +86,19 @@ class _PinterestUIState extends State<PinterestUI> {
                   itemBuilder: (context, index) {
                     final cafe = cafes[index];
                     return ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: GestureDetector(
-                        child: Image.asset(
-                          cafe['images']
-                              .split(',')
-                              .first
-                              .trim(), // Split and use the first image path
-                          fit: BoxFit.cover,
-                        ),
-                        onTap: () {
-                          showCafeInfoPopup(context, cafe);
-                        },
-                      )
-                    );
+                        borderRadius: BorderRadius.circular(12),
+                        child: GestureDetector(
+                          child: Image.asset(
+                            cafe['images']
+                                .split(',')
+                                .first
+                                .trim(), // Split and use the first image path
+                            fit: BoxFit.cover,
+                          ),
+                          onTap: () {
+                            showCafeInfoPopup(context, cafe);
+                          },
+                        ));
                   },
                 ),
               ),

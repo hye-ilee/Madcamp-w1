@@ -12,6 +12,7 @@ class JjimListPage extends StatefulWidget {
 
 class _JjimListPageState extends State<JjimListPage> {
   List<Map<String, dynamic>> _cafes = [];
+  List<String> _jjimList = [];
   bool _loading = true;
 
   @override
@@ -22,16 +23,14 @@ class _JjimListPageState extends State<JjimListPage> {
 
   Future<void> _fetchJjimList() async {
     try {
-      // Assuming user ID is fixed or provided, replace `1` with actual user ID
       final userInfo = await DatabaseHelper.instance.fetchUserInfo(1);
       if (userInfo != null) {
         final String? jjimListString = userInfo['jjim_list'];
         if (jjimListString != null && jjimListString.isNotEmpty) {
-          // Deserialize JSON string to a List
-          List<dynamic> jjimList = jsonDecode(jjimListString);
+          _jjimList = List<String>.from(jsonDecode(jjimListString));
 
           final List<Map<String, dynamic>> fetchedCafes = [];
-          for (String kakaoId in jjimList) {
+          for (String kakaoId in _jjimList) {
             final cafe =
                 await DatabaseHelper.instance.getCafeByKakaoId(kakaoId);
             if (cafe != null) {
@@ -63,6 +62,26 @@ class _JjimListPageState extends State<JjimListPage> {
     }
   }
 
+  Future<void> _toggleFavorite(String kakaoId) async {
+    try {
+      setState(() {
+        if (_jjimList.contains(kakaoId)) {
+          _jjimList.remove(kakaoId);
+        } else {
+          _jjimList.add(kakaoId);
+        }
+      });
+
+      final userInfo = await DatabaseHelper.instance.fetchUserInfo(1);
+      if (userInfo != null) {
+        userInfo['jjim_list'] = jsonEncode(_jjimList);
+        await DatabaseHelper.instance.updateUserInfo(userInfo);
+      }
+    } catch (e) {
+      print('Error updating favorite list: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_loading) {
@@ -86,20 +105,36 @@ class _JjimListPageState extends State<JjimListPage> {
         itemCount: _cafes.length,
         itemBuilder: (context, index) {
           final cafe = _cafes[index];
+          final bool isFavorite = _jjimList.contains(cafe['kakao_id']);
           return ListTile(
             title: Text(cafe['name'] ?? 'Unnamed Cafe'),
             subtitle: Text(cafe['phone'] ?? 'No Phone Number'),
-            trailing: IconButton(
-              icon: const Icon(Icons.phone, color: Colors.green),
-              onPressed: () {
-                if (cafe['phone'] != null) {
-                  _makePhoneCall(cafe['phone']);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('No phone number available.')),
-                  );
-                }
-              },
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    isFavorite ? Icons.star : Icons.star_border,
+                    color: isFavorite ? Colors.yellow : null,
+                  ),
+                  onPressed: () async {
+                    await _toggleFavorite(cafe['kakao_id']);
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.phone, color: Colors.green),
+                  onPressed: () {
+                    if (cafe['phone'] != null) {
+                      _makePhoneCall(cafe['phone']);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('No phone number available.')),
+                      );
+                    }
+                  },
+                ),
+              ],
             ),
           );
         },
