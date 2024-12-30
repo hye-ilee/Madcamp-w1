@@ -79,8 +79,17 @@ class _JjimListPageState extends State<JjimListPage> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('My Cafes'),
+        title: const Text(
+          '찜한 카페 목록',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
       ),
       body: ListView.builder(
         itemCount: _cafes.length,

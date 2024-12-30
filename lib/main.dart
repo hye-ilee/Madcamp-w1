@@ -24,7 +24,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Cafe-in App',
-      theme: ThemeData(primarySwatch: Colors.brown),
+      theme: ThemeData(
+        primarySwatch: Colors.brown,
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: Colors.brown, // 선택된 항목의 색상을 갈색으로 설정
+          unselectedItemColor: Colors.grey, // 선택되지 않은 항목의 색상을 회색으로 설정
+          backgroundColor: Colors.white, // BottomNavigationBar 배경색 설정
+        ),
+      ),
       home: const MainPage(),
     );
   }

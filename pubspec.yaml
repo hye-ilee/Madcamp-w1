@@ -84,18 +84,19 @@ flutter:
     - assets/yusungstar2.jpg
     - assets/ravic1.jpg
     - assets/lesser1.jpeg
-    - assets/baristabean1.jpeg
+    - assets/baristabean1.jpg
     - assets/cafe nuovo1.jpg
     - assets/cafe nuovo2.jpg
     - assets/ooo1.jpg
     - assets/ooo2.jpeg
     - assets/ooo3.jpg
     - assets/ooo4.jpg
-    - assets/oasis1.jpg
+    - assets/oasis1.png
     - assets/oasis2.jpg
     - assets/sosin1.jpg
     - assets/sosin2.jpeg
     - assets/sosoc1.jpg
+    - assets/sosoc2.jpg
     - assets/glory days1.jpg
     - assets/niche1.jpg
     - assets/niche2.jpg
@@ -104,9 +105,11 @@ flutter:
     - assets/aight1.jpeg
     - assets/aight2.jpg
     - assets/hightable1.jpg
+    - assets/hightable2.jpg
     - assets/middleslow1.jpeg
     - assets/cafe jejakso1.jpg
     - assets/cafe jejakso2.jpg
+    - assets/beaneer1.jpg
     - assets/music.png
     - assets/study.png
     - assets/spacious.png
