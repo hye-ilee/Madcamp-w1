@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:phone_demo/helpers/database_helper.dart';
+import 'package:phone_demo/helpers/popup_helper.dart';
 
 class PinterestUI extends StatefulWidget {
   const PinterestUI({Key? key}) : super(key: key);
@@ -86,13 +87,18 @@ class _PinterestUIState extends State<PinterestUI> {
                     final cafe = cafes[index];
                     return ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.asset(
-                        cafe['images']
-                            .split(',')
-                            .first
-                            .trim(), // Split and use the first image path
-                        fit: BoxFit.cover,
-                      ),
+                      child: GestureDetector(
+                        child: Image.asset(
+                          cafe['images']
+                              .split(',')
+                              .first
+                              .trim(), // Split and use the first image path
+                          fit: BoxFit.cover,
+                        ),
+                        onTap: () {
+                          showCafeInfoPopup(context, cafe);
+                        },
+                      )
                     );
                   },
                 ),

@@ -3,7 +3,7 @@ import 'package:phone_demo/helpers/database_helper.dart';
 class DatabaseInitializer {
   static Future<void> initializeDatabase() async {
     final userInfo = {
-      'name': '형원',
+      'user_name': '형원',
       'music_cnt': 1,
       'study_cnt': 0,
       'dessert_cnt': 0,
