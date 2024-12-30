@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:phone_demo/helpers/databse_util.dart';
 import 'cafe_list.dart';
 import 'contacts.dart';
@@ -12,7 +13,9 @@ void main() async {
   // 필요할 때만 데이터베이스 초기화
   await initializeDatabaseIfNeeded();
 
-  runApp(MyApp());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,]).then((_) {
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -23,7 +26,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Cafe-in App',
-      theme: ThemeData(primarySwatch: Colors.brown),
+      theme: ThemeData(
+        primarySwatch: Colors.brown,
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          selectedItemColor: Colors.brown, // 선택된 항목의 색상을 갈색으로 설정
+          unselectedItemColor: Colors.grey, // 선택되지 않은 항목의 색상을 회색으로 설정
+          backgroundColor: Colors.white, // BottomNavigationBar 배경색 설정
+        ),
+      ),
       home: const MainPage(),
     );
   }
