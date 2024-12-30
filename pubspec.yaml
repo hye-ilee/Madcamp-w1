@@ -39,6 +39,7 @@ dependencies:
   flutter_native_splash: ^2.4.3
   sqflite: ^2.3.2
   path: ^1.8.3
+  url_launcher: ^6.1.10
 
 flutter_native_splash:
   color: "#ffffff" # Background color for the splash screen

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:phone_demo/helpers/database_helper.dart';
 import 'package:phone_demo/helpers/popup_helper.dart';
+import 'package:phone_demo/helpers/kakao_map_helper.dart';
 
 class CafeListScreen extends StatefulWidget {
   const CafeListScreen({Key? key}) : super(key: key);
@@ -108,8 +109,9 @@ class _CafeListScreenState extends State<CafeListScreen> {
                   decoration: InputDecoration(
                     hintText: '오늘 내가 가고 싶은 카페는?',
                     hintStyle: const TextStyle(color: Colors.grey),
-                    suffixIcon: IconButton(onPressed: () {
-                      _searchCafes(_searchController.text);
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        _searchCafes(_searchController.text);
                       },
                       icon: const Icon(Icons.search),
                     ),
