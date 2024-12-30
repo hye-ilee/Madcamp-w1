@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:phone_demo/helpers/databse_util.dart';
 import 'cafe_list.dart';
 import 'contacts.dart';
@@ -10,7 +11,9 @@ void main() async {
   // 필요할 때만 데이터베이스 초기화
   await initializeDatabaseIfNeeded();
 
-  runApp(MyApp());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,]).then((_) {
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
