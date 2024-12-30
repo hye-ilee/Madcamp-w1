@@ -40,6 +40,9 @@ dependencies:
   sqflite: ^2.3.2
   path: ^1.8.3
   url_launcher: ^6.1.10
+  webview_flutter: ^4.7.0
+  kakao_map_plugin: ^0.3.0
+  kakao_flutter_sdk_user: ^1.9.6
 
 flutter_native_splash:
   color: "#ffffff" # Background color for the splash screen

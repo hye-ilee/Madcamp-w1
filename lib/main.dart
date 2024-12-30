@@ -4,9 +4,11 @@ import 'package:phone_demo/helpers/databse_util.dart';
 import 'cafe_list.dart';
 import 'contacts.dart';
 import 'my_gallery.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  KakaoSdk.init(nativeAppKey: 'd387d5c00f7aece8b1a39dfaf61917bd');
 
   // 필요할 때만 데이터베이스 초기화
   await initializeDatabaseIfNeeded();
