@@ -1,75 +1,109 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:phone_demo/helpers/database_helper.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:convert';
 
-class ContactPickerPage extends StatefulWidget {
-  const ContactPickerPage({Key? key}) : super(key: key);
+class JjimListPage extends StatefulWidget {
+  const JjimListPage({Key? key}) : super(key: key);
 
   @override
-  _ContactPickerPageState createState() => _ContactPickerPageState();
+  _JjimListPageState createState() => _JjimListPageState();
 }
 
-class _ContactPickerPageState extends State<ContactPickerPage> {
-  List<Contact> _contacts = [];
-  bool _permissionChecked = false;
-  bool _permissionGranted = false;
+class _JjimListPageState extends State<JjimListPage> {
+  List<Map<String, dynamic>> _cafes = [];
+  bool _loading = true;
 
   @override
   void initState() {
     super.initState();
-    _requestPermission();
+    _fetchJjimList();
   }
 
-  Future<void> _requestPermission() async {
-    final hasPermission = await FlutterContacts.requestPermission();
-    setState(() {
-      _permissionChecked = true;
-      _permissionGranted = hasPermission;
-    });
+  Future<void> _fetchJjimList() async {
+    try {
+      // Assuming user ID is fixed or provided, replace `1` with actual user ID
+      final userInfo = await DatabaseHelper.instance.fetchUserInfo(1);
+      if (userInfo != null) {
+        final String? jjimListString = userInfo['jjim_list'];
+        if (jjimListString != null && jjimListString.isNotEmpty) {
+          // Deserialize JSON string to a List
+          List<dynamic> jjimList = jsonDecode(jjimListString);
 
-    if (hasPermission) {
-      _fetchContacts();
+          final List<Map<String, dynamic>> fetchedCafes = [];
+          for (String kakaoId in jjimList) {
+            final cafe =
+                await DatabaseHelper.instance.getCafeByKakaoId(kakaoId);
+            if (cafe != null) {
+              fetchedCafes.add(cafe);
+            }
+          }
+          setState(() {
+            _cafes = fetchedCafes;
+          });
+        }
+      }
+    } catch (e) {
+      print('Error fetching jjim list: $e');
+    } finally {
+      setState(() {
+        _loading = false;
+      });
     }
   }
 
-  Future<void> _fetchContacts() async {
-    final contacts = await FlutterContacts.getContacts(withProperties: true);
-    setState(() {
-      _contacts = contacts;
-    });
+  void _makePhoneCall(String phoneNumber) async {
+    final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
+    if (await canLaunchUrl(phoneUri)) {
+      await launchUrl(phoneUri);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not make the call.')),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!_permissionChecked) {
+    if (_loading) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (!_permissionGranted) {
+    if (_cafes.isEmpty) {
       return const Center(
         child: Text(
-          'Contacts permission is required to use this feature.',
+          'No cafes found in your Jjim list.',
           textAlign: TextAlign.center,
         ),
       );
     }
 
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.builder(
-            itemCount: _contacts.length,
-            itemBuilder: (context, index) {
-              final contact = _contacts[index];
-              return ListTile(
-                title: Text(contact.displayName ?? 'No Name'),
-                subtitle: Text(contact.phones.isNotEmpty
-                    ? contact.phones.first.number
-                    : 'No Number'),
-              );
-            },
-          ),
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Cafes'),
+      ),
+      body: ListView.builder(
+        itemCount: _cafes.length,
+        itemBuilder: (context, index) {
+          final cafe = _cafes[index];
+          return ListTile(
+            title: Text(cafe['name'] ?? 'Unnamed Cafe'),
+            subtitle: Text(cafe['phone'] ?? 'No Phone Number'),
+            trailing: IconButton(
+              icon: const Icon(Icons.phone, color: Colors.green),
+              onPressed: () {
+                if (cafe['phone'] != null) {
+                  _makePhoneCall(cafe['phone']);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('No phone number available.')),
+                  );
+                }
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }

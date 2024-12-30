@@ -11,7 +11,8 @@ class DatabaseInitializer {
       'space_cnt': 0,
       'time_cnt': 0,
       'profile_img': 'profile_image.png',
-      'jjim_list': '[]' // Stored as a JSON string
+      "jjim_list": "[\"2031573995\", \"2044764824\"]"
+// Stored as a JSON string
     };
     await DatabaseHelper.instance.insertUserInfo(userInfo);
     print('User info inserted.');

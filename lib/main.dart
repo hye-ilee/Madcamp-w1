@@ -38,7 +38,7 @@ class _MainPageState extends State<MainPage> {
   int _currentIndex = 1;
 
   final List<Widget> _pages = [
-    const ContactPickerPage(),
+    const JjimListPage(),
     const CafeListScreen(),
     PinterestUI(),
   ];

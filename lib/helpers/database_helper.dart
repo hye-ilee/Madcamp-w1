@@ -100,6 +100,17 @@ class DatabaseHelper {
     );
   }
 
+  Future<Map<String, dynamic>?> getCafeByKakaoId(String kakaoId) async {
+    final db = await database;
+    final result = await db.query(
+      'cafes',
+      where: 'kakao_id = ?',
+      whereArgs: [kakaoId],
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null;
+  }
+
   Future<Map<String, dynamic>?> fetchUserInfo(int id) async {
     final db = await database;
     final result = await db.query(
@@ -165,7 +176,6 @@ class DatabaseHelper {
     return result;
   }
 
-
   Future<List<Map<String, dynamic>>> searchCafes(String query) async {
     final db = await instance.database;
     final result = await db.query(
@@ -173,7 +183,7 @@ class DatabaseHelper {
       where: 'name LIKE ? OR menus LIKE ?',
       whereArgs: ['%$query%', '%$query%'],
     );
-  return result;
+    return result;
   }
 
   Future<List<Map<String, dynamic>>> getTopCafesByCategory(
