@@ -107,7 +107,7 @@ class DatabaseHelper {
       where: 'id = ?',
       whereArgs: [id],
     );
-    return result.isNotEmpty ? result.first : null;
+    return result.isNotEmpty ? Map<String, dynamic>.from(result.first) : null;
   }
 
   Future<int> insertUserInfo(Map<String, dynamic> userInfo) async {
