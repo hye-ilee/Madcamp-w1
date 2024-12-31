@@ -38,9 +38,11 @@ class DatabaseHelper {
       kakao_id TEXT NOT NULL,
       phone TEXT NOT NULL,
       location TEXT NOT NULL,
-      music INTEGER NOT NULL,
+      vibey INTEGER NOT NULL,
+      afternoon INTEGER NOT NULL,
       study INTEGER NOT NULL,
       dessert INTEGER NOT NULL,
+      coffee INTEGER NOT NULL,
       pet INTEGER NOT NULL,
       space INTEGER NOT NULL,
       time INTEGER NOT NULL
@@ -52,9 +54,11 @@ class DatabaseHelper {
     CREATE TABLE user_info (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_name TEXT NOT NULL,
-      music_cnt INTEGER NOT NULL,
+      vibey_cnt INTEGER NOT NULL,
+      afternoon_cnt INTEGER NOT NULL,
       study_cnt INTEGER NOT NULL,
       dessert_cnt INTEGER NOT NULL,
+      coffee_cnt INTEGER NOT NULL,
       pet_cnt INTEGER NOT NULL,
       space_cnt INTEGER NOT NULL,
       time_cnt INTEGER NOT NULL,
@@ -166,11 +170,11 @@ class DatabaseHelper {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getTopCafesByMusicScore() async {
+  Future<List<Map<String, dynamic>>> getTopCafesByVibeyScore() async {
     final db = await instance.database;
     final result = await db.query(
       'cafes',
-      orderBy: 'music DESC',
+      orderBy: 'vibey DESC',
       limit: 5,
     );
     return result;

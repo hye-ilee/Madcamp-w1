@@ -23,8 +23,8 @@ class _PinterestUIState extends State<PinterestUI> {
     final db = await DatabaseHelper.instance.database;
     return db.rawQuery('''
       SELECT *, 
-             (music * music_cnt + study * study_cnt + dessert * dessert_cnt + 
-              pet * pet_cnt + space * space_cnt + time * time_cnt) AS weighted_score
+             (vibey * vibey_cnt + afternoon * afternoon_cnt + study * study_cnt + dessert * dessert_cnt +
+              coffee * coffee_cnt + pet * pet_cnt + space * space_cnt + time * time_cnt) AS weighted_score
       FROM cafes, user_info
       WHERE user_info.id = 1
       ORDER BY weighted_score DESC
@@ -71,7 +71,7 @@ class _PinterestUIState extends State<PinterestUI> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No cafes found.'));
+            return const Center(child: Text('추천을 위한 정보를 모으지 못했어요'));
           } else {
             final cafes = snapshot.data!;
             return Container(

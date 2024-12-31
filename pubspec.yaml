@@ -112,12 +112,14 @@ flutter:
     - assets/cafe jejakso1.jpg
     - assets/cafe jejakso2.jpg
     - assets/beaneer1.jpg
-    - assets/music.png
-    - assets/study.png
-    - assets/spacious.png
-    - assets/late hours.png
-    - assets/pet-friendly.png
+    - assets/vibey.png
+    - assets/afternoon.png
+    - assets/cagong.png
     - assets/dessert.png
+    - assets/coffee.png
+    - assets/late-hours.png
+    - assets/pet.png
+    - assets/space.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
