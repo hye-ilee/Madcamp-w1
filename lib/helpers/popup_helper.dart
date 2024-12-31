@@ -36,6 +36,10 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
   final List<String> cafeImages =
       (cafe['images'] as String).split(',').map((e) => e.trim()).toList();
 
+  // Scraped menu list (simulate scraping or fetching from the database)
+  final List<String> menuList =
+      (cafe['menus'] as String).split(',').map((e) => e.trim()).toList();
+
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -91,7 +95,7 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                         const SizedBox(height: 8.0),
                         Text('Location: ${cafe['location']}'),
                         const SizedBox(height: 8.0),
-                        Text('Menus: ${cafe['menus']}'),
+                        Text('Phone: ${cafe['phone']}'),
                         const SizedBox(height: 16.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -126,9 +130,8 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                                     cafe['kakao_id']);
                               },
                               style: TextButton.styleFrom(
-                                foregroundColor: Colors.white, // Text color
-                                backgroundColor:
-                                    Colors.brown, // Button background color
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.brown,
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16.0, vertical: 8.0),
                               ),
@@ -139,9 +142,8 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                                 Navigator.of(context).pop();
                               },
                               style: TextButton.styleFrom(
-                                foregroundColor: Colors.white, // Text color
-                                backgroundColor:
-                                    Colors.brown, // Button background color
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.brown,
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16.0, vertical: 8.0),
                               ),
@@ -149,7 +151,6 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                             ),
                           ],
                         ),
-
                         const SizedBox(height: 16.0),
 
                         // Image carousel
@@ -168,6 +169,25 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                                     fit: BoxFit.cover,
                                   ),
                                 ),
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 16.0),
+
+                        // Scrollable menu list
+                        Text(
+                          'Menus',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 8.0),
+                        Container(
+                          height: 150.0,
+                          child: ListView.builder(
+                            itemCount: menuList.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text(menuList[index]),
                               );
                             },
                           ),
