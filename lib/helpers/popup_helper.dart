@@ -4,7 +4,6 @@ import 'package:phone_demo/helpers/database_helper.dart';
 import 'package:phone_demo/helpers/kakao_map_helper.dart';
 import 'dart:convert';
 
-// Helper function to parse location string
 LatLng parseLocation(String location) {
   final parts = location.split(',').map((e) => e.trim()).toList();
   if (parts.length == 2) {
@@ -29,10 +28,8 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
 
   // Offset to move the marker away from the center
   const double verticalOffset = 0.005; // Adjust this for up/down positioning
-  const double horizontalOffset =
-      0.000; // Adjust this for left/right positioning
+  const double horizontalOffset = 0.000; // Adjust this for left/right positioning
 
-  // Parse cafe images
   final List<String> cafeImages =
       (cafe['images'] as String).split(',').map((e) => e.trim()).toList();
 
@@ -44,7 +41,6 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
         builder: (BuildContext context, StateSetter setState) {
           return Stack(
             children: [
-              // Google Map background
               Positioned.fill(
                 child: GoogleMap(
                   initialCameraPosition: CameraPosition(
@@ -67,7 +63,6 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                 ),
               ),
 
-              // DraggableScrollableSheet for details
               DraggableScrollableSheet(
                 initialChildSize: 0.5, // Half screen height initially
                 minChildSize: 0.3, // Minimum height
@@ -139,9 +134,8 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                                 Navigator.of(context).pop();
                               },
                               style: TextButton.styleFrom(
-                                foregroundColor: Colors.white, // Text color
-                                backgroundColor:
-                                    Colors.brown, // Button background color
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.brown,
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16.0, vertical: 8.0),
                               ),
@@ -151,8 +145,6 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                         ),
 
                         const SizedBox(height: 16.0),
-
-                        // Image carousel
                         SizedBox(
                           height: 200.0, // Adjust height as needed
                           child: PageView.builder(

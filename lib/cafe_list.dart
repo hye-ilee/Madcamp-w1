@@ -3,9 +3,7 @@ import 'package:phone_demo/helpers/database_helper.dart';
 import 'package:phone_demo/helpers/popup_helper.dart';
 
 class CafeListScreen extends StatefulWidget {
-  final String? category;
-  final int usercnt;
-  const CafeListScreen({Key? key, this.category, required this.usercnt}) : super(key: key);
+  const CafeListScreen({Key? key}) : super(key: key);
 
   @override
   _CafeListScreenState createState() => _CafeListScreenState();
@@ -44,20 +42,10 @@ class _CafeListScreenState extends State<CafeListScreen> {
     {'image': 'assets/space.png', 'label': '대형카페'},
   ];
 
-  Future<List<Map<String, dynamic>>> _getCafesFromHashtag() async {
-    if(widget.category != null){
-      final field = _getFieldNameByCategoryLabel(widget.category!);
-      if(field != null){
-        return await DatabaseHelper.instance.getTopCafesByCategory(field, widget.usercnt);
-      }
-    }
-    return await DatabaseHelper.instance.getTopCafesByVibeyScore();
-  }
-
   @override
   void initState() {
     super.initState();
-    _topCafes = _getCafesFromHashtag();
+    _topCafes = DatabaseHelper.instance.getTopCafesByVibeyScore();
   }
 
   String? _getFieldNameByCategoryLabel(String label) {
@@ -88,12 +76,12 @@ class _CafeListScreenState extends State<CafeListScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
         backgroundColor: Colors.white,
-        centerTitle: true,
-        title: _isSearching ?
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          title: _isSearching ?
           Align(
             alignment: Alignment.centerLeft,
             child: IconButton(
@@ -106,14 +94,14 @@ class _CafeListScreenState extends State<CafeListScreen> {
               },
             ),
           )
-          : const Text(
+              : const Text(
             '카페 찾기',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
-      ),
+        ),
       body: MediaQuery.removePadding(
         context: context,
         removeTop: true,
@@ -123,7 +111,7 @@ class _CafeListScreenState extends State<CafeListScreen> {
             Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
@@ -237,7 +225,7 @@ class _CafeListScreenState extends State<CafeListScreen> {
                         left: 16.0,
                         right: 16.0,
                         child: Container(
-                          height: screenHeight * 0.4,
+                          height: screenHeight * 0.3,
                           decoration: BoxDecoration(
                             color: Colors.white38,
                             borderRadius: BorderRadius.circular(12.0),
