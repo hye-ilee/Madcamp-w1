@@ -125,16 +125,31 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                                 KakaoMapHelper.openKakaoPlaceWithId(
                                     cafe['kakao_id']);
                               },
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.white, // Text color
+                                backgroundColor:
+                                    Colors.brown, // Button background color
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0, vertical: 8.0),
+                              ),
                               child: const Text('지도 보기'),
                             ),
                             TextButton(
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.white, // Text color
+                                backgroundColor:
+                                    Colors.brown, // Button background color
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0, vertical: 8.0),
+                              ),
                               child: const Text('닫기'),
                             ),
                           ],
                         ),
+
                         const SizedBox(height: 16.0),
 
                         // Image carousel
