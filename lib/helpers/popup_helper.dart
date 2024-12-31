@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:phone_demo/helpers/database_helper.dart';
 import 'package:phone_demo/helpers/kakao_map_helper.dart';
 import 'dart:convert';
+
+// Helper function to parse location string
+LatLng parseLocation(String location) {
+  final parts = location.split(',').map((e) => e.trim()).toList();
+  if (parts.length == 2) {
+    final latitude = double.tryParse(parts[0]) ?? 0.0;
+    final longitude = double.tryParse(parts[1]) ?? 0.0;
+    return LatLng(latitude, longitude);
+  }
+  return const LatLng(0.0, 0.0); // Default fallback if parsing fails
+}
 
 void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
   final userInfo = await DatabaseHelper.instance.fetchUserInfo(1);
@@ -12,65 +24,117 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
     );
   }
   bool isFavorite = jjims.contains(cafe['kakao_id']);
+  final LatLng cafeLocation = parseLocation(cafe['location']);
+  GoogleMapController? mapController;
 
-  showDialog(
+  // Offset to move the marker away from the center
+  const double verticalOffset = 0.005; // Adjust this for up/down positioning
+  const double horizontalOffset =
+      0.000; // Adjust this for left/right positioning
+
+  showModalBottomSheet(
     context: context,
+    isScrollControlled: true,
     builder: (BuildContext context) {
       return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
-          return AlertDialog(
-            title: Text(cafe['name']),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Location: ${cafe['location']}'),
-                const SizedBox(height: 8.0),
-                Text('Menus: ${cafe['menus']}'),
-              ],
-            ),
-            actions: [
-              IconButton(
-                icon: Icon(
-                  isFavorite ? Icons.star : Icons.star_border,
-                  color: isFavorite ? Colors.yellow : null,
+          return Stack(
+            children: [
+              // Google Map background
+              Positioned.fill(
+                child: GoogleMap(
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(
+                      cafeLocation.latitude - verticalOffset,
+                      cafeLocation.longitude + horizontalOffset,
+                    ),
+                    zoom: 15,
+                  ),
+                  markers: {
+                    Marker(
+                      markerId: MarkerId(cafe['kakao_id']),
+                      position: cafeLocation,
+                      infoWindow: InfoWindow(title: cafe['name']),
+                    ),
+                  },
+                  onMapCreated: (controller) {
+                    mapController = controller;
+                  },
                 ),
-                onPressed: () async {
-                  setState(() {
-                    isFavorite =
-                        jjims.contains(cafe['kakao_id']) ? false : true;
-                  });
-
-                  // Update jjim_list in the database
-                  if (isFavorite) {
-                    jjims.add(cafe['kakao_id']);
-                  } else {
-                    jjims.remove(cafe['kakao_id']);
-                  }
-
-                  // Update user info in the database
-                  if (userInfo != null) {
-                    userInfo["jjim_list"] = jsonEncode(jjims);
-                    await DatabaseHelper.instance.updateUserInfo(userInfo);
-                    // print('3 jjim list: ${userInfo["jjim_list"]}');
-                  }
-                },
               ),
 
-              // 지도 보기 버튼
-              TextButton(
-                onPressed: () {
-                  KakaoMapHelper.openKakaoPlaceWithId(cafe['kakao_id']);
-                },
-                child: const Text('지도 보기'),
-              ),
+              // DraggableScrollableSheet for details
+              DraggableScrollableSheet(
+                initialChildSize: 0.5, // Half screen height initially
+                minChildSize: 0.3, // Minimum height
+                maxChildSize: 1.0, // Full screen height
+                builder: (context, scrollController) {
+                  return Container(
+                    padding: const EdgeInsets.all(16.0),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20.0),
+                      ),
+                    ),
+                    child: ListView(
+                      controller: scrollController,
+                      children: [
+                        Text(
+                          cafe['name'],
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 8.0),
+                        Text('Location: ${cafe['location']}'),
+                        const SizedBox(height: 8.0),
+                        Text('Menus: ${cafe['menus']}'),
+                        const SizedBox(height: 16.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                isFavorite ? Icons.star : Icons.star_border,
+                                color: isFavorite ? Colors.yellow : null,
+                              ),
+                              onPressed: () async {
+                                setState(() {
+                                  isFavorite = !isFavorite;
+                                });
 
-              // 닫기 버튼
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
+                                // Update jjim_list in the database
+                                if (isFavorite) {
+                                  jjims.add(cafe['kakao_id']);
+                                } else {
+                                  jjims.remove(cafe['kakao_id']);
+                                }
+
+                                if (userInfo != null) {
+                                  userInfo["jjim_list"] = jsonEncode(jjims);
+                                  await DatabaseHelper.instance
+                                      .updateUserInfo(userInfo);
+                                }
+                              },
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                KakaoMapHelper.openKakaoPlaceWithId(
+                                    cafe['kakao_id']);
+                              },
+                              child: const Text('지도 보기'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('닫기'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
                 },
-                child: const Text('닫기'),
               ),
             ],
           );

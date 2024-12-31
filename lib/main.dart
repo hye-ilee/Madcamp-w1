@@ -4,16 +4,16 @@ import 'package:phone_demo/helpers/databse_util.dart';
 import 'cafe_list.dart';
 import 'contacts.dart';
 import 'my_gallery.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  KakaoSdk.init(nativeAppKey: 'd387d5c00f7aece8b1a39dfaf61917bd');
 
   // 필요할 때만 데이터베이스 초기화
   await initializeDatabaseIfNeeded();
 
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,]).then((_) {
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]).then((_) {
     runApp(const MyApp());
   });
 }
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       title: 'Cafe-in App',
       theme: ThemeData(
         primarySwatch: Colors.brown,
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           selectedItemColor: Colors.brown, // 선택된 항목의 색상을 갈색으로 설정
           unselectedItemColor: Colors.grey, // 선택되지 않은 항목의 색상을 회색으로 설정
           backgroundColor: Colors.white, // BottomNavigationBar 배경색 설정

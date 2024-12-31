@@ -11,11 +11,12 @@
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
 
-        <!-- Add Kakao App Key here -->
-        <meta-data
-            android:name="com.kakao.sdk.AppKey"
-            android:value="d387d5c00f7aece8b1a39dfaf61917bd" />
+        
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyAkahBUWcr_0hQPYE8RkL8jHKKzAiLKQzQ"/>
 
+
+        <!-- Add Kakao App Key here -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
