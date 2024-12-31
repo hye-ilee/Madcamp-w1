@@ -32,6 +32,10 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
   const double horizontalOffset =
       0.000; // Adjust this for left/right positioning
 
+  // Parse cafe images
+  final List<String> cafeImages =
+      (cafe['images'] as String).split(',').map((e) => e.trim()).toList();
+
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -130,6 +134,28 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                               child: const Text('닫기'),
                             ),
                           ],
+                        ),
+                        const SizedBox(height: 16.0),
+
+                        // Image carousel
+                        SizedBox(
+                          height: 200.0, // Adjust height as needed
+                          child: PageView.builder(
+                            itemCount: cafeImages.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  child: Image.asset(
+                                    cafeImages[index],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),
