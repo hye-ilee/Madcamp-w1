@@ -11,7 +11,9 @@ void main() async {
   // 필요할 때만 데이터베이스 초기화
   await initializeDatabaseIfNeeded();
 
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,]).then((_) {
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]).then((_) {
     runApp(const MyApp());
   });
 }
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
       title: 'Cafe-in App',
       theme: ThemeData(
         primarySwatch: Colors.brown,
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           selectedItemColor: Colors.brown, // 선택된 항목의 색상을 갈색으로 설정
           unselectedItemColor: Colors.grey, // 선택되지 않은 항목의 색상을 회색으로 설정
           backgroundColor: Colors.white, // BottomNavigationBar 배경색 설정

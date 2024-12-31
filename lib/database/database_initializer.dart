@@ -13,8 +13,7 @@ class DatabaseInitializer {
       'space_cnt': 0,
       'time_cnt': 0,
       'profile_img': 'profile_image.png',
-      "jjim_list": "[\"2031573995\", \"2044764824\"]"
-// Stored as a JSON string
+      "jjim_list": "[\"2031573995\", \"2044764824\"]" // Stored as a JSON string
     };
     await DatabaseHelper.instance.insertUserInfo(userInfo);
     print('User info inserted.');
@@ -26,7 +25,8 @@ class DatabaseInitializer {
         'images': 'assets/friand1.jpg, assets/friand2.jpg',
         'kakao_id': '2044764824',
         'phone': '070-8671-2334',
-        'location': '579788, 795476',
+
+        'location': '36.3612996, 127.3555317',
         'vibey': 5,
         'afternoon': 6,
         'study': 7,
