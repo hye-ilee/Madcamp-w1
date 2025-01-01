@@ -42,14 +42,14 @@ Github Releases 내 "first release"의 **app-release.apk**를 참고하세요!
 ## 레퍼런스 📚
 - **📷 카페 사진:** 카카오맵 및 네이버지도
 - **🍴 카페 메뉴:** 카카오맵
-- - **🎨 로고 및 카테고리 아이콘:** Flaticon [author pualalee](https://www.flaticon.com/kr/authors/paulalee)
+- **🎨 로고 및 카테고리 아이콘:** Flaticon [author pualalee](https://www.flaticon.com/kr/authors/paulalee)
 ---
 
 ## 팀원 👥
 
-| 이름  | 소속            | 이메일                  | Github ID                               | 역할                        |  
-|-----|---------------|----------------------|-----------------------------------------|---------------------------|  
-| 이혜리 | KAIST 전산학부    | harriet@kaist.ac.kr  | [hye-ilee](https://github.com/hye-ilee) | UI 디자인, 검색 및 찜 기능 개발 등    |  
-| 조형원 | 서울대학교 전기정보공학부 | dylanhwcho@gmail.com | [dylancho](https://github.com/dylancho) | SQF lite DB 구축, 구글맵 api 등 |  
+| 이름   | 소속             | 이메일                  | Github ID                               | 역할                         |  
+|------|----------------|----------------------|-----------------------------------------|----------------------------|  
+| 이혜리  | KAIST 전산학부     | harriet@kaist.ac.kr  | [hye-ilee](https://github.com/hye-ilee) | UI 디자인, 검색 및 찜 기능 개발 등     |  
+| 조형원  | 서울대학교 전기정보공학부  | dylanhwcho@gmail.com | [dylancho](https://github.com/dylancho) | SQF lite DB 구축, 구글맵 api 등  |  
 
 <br>
