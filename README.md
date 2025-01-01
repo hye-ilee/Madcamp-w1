@@ -12,14 +12,10 @@
 ### 1. **🔍 카페 검색 탭**
 - 각 카페의 점수 항목인 8개의 카테고리 아이콘을 클릭 시, 해당 항목의 TOP 5 카페들 리스트가 보입니다.
 - 카페 이름이나 메뉴로 검색도 가능합니다.
-<div style="display: flex; justify-content: center; gap: 20px">
+<div style="display: flex; justify-content: center; gap: 20px; align-items: center;">
   <img src="https://github.com/user-attachments/assets/cd503542-f7f6-4d6d-8d91-0af9dc6734e5" width="300">
   <img src="https://github.com/user-attachments/assets/d5705d04-67a9-4c48-9f72-a5b045a95f1a" width="300">
 </div>
-
-[//]: # (![splash]&#40;&#41;)
-
-[//]: # (![menu-search]&#40;&#41;)
 
 ### 2. **🗺️ 카페 정보 시트**
 - 카페 검색 탭이나 갤러리에서 특정 요소를 클릭 시, 해당 (이미지의)카페 정보가 하단에서 올라옵니다.
@@ -31,14 +27,14 @@
 ### 3. **🖼️ 추천하는 카페 갤러리 탭**
 - 유저가 주로 어떤 카테고리의 카페를 찾아봤는지를 '추천하는 카페' 갤러리에 반영하여 유저의 취향에 맞을 것 같은 카페 사진들을 우선으로 보여줍니다.
   - 검색 탭에서 각 카테고리의 클릭 수를 기록하여 8개 항목 점수를 합산할 때 가중치로 사용합니다.
-<div style="display: flex; justify-content: center;">
+<div style="display: flex; justify-content: center; align-items: center;">
   <img src="https://github.com/user-attachments/assets/ce42f80a-e4bb-4d2d-8821-40736f94dfd5" width="300">
 </div>
 
 ### 4. **📞 찜한 카페 연락처 탭**
 - 카페 정보 시트에서 유저가 찜한 카페들의 연락처가 보입니다.
 - 통화 버튼 옆에 찜하기 버튼으로 찜 취소도 가능합니다.
-<div style="display: flex; justify-content: center;">
+<div style="display: flex; justify-content: center; align-items: center;">
   <img src="https://github.com/user-attachments/assets/7e3fc6b9-a3e4-4604-be23-4ca9f163044f" width="300">
 </div>
 
