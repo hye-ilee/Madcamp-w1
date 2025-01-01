@@ -1,16 +1,55 @@
-# phone_demo
 
-A new Flutter project.
+# CAFE-in 카페-인
 
-## Getting Started
+## 개요 📝
+**CAFE-in**은 카이스트 주변 20개의 카페 정보를 개발자가 직접 가보고 평가한 8개 항목의 점수를 기반으로 보여주는 앱입니다.
+카페 찜하기로 연락처를 등록하고, 유저가 어떤 카테고리의 카페를 자주 찾아보는지를 반영해 추천하는 카페 사진을 보여줍니다.
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## 앱 구성 📱
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 1. **🔍 카페 검색 탭**
+- 각 카페의 점수 항목인 8개의 카테고리 아이콘을 클릭 시, 해당 항목의 TOP 5 카페들 리스트가 보입니다.
+- 카페 이름이나 메뉴로 검색도 가능합니다.
+[스플래쉬 및 자유주제 탭](assets/GIFs/앱%20아이콘+카테고리별%20정렬.gif)
+[카페 검색](assets/GIFs/카페%20이름%20메뉴로%20검색.gif)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 2. **🗺️ 카페 정보 시트**
+- 카페 검색 탭이나 갤러리에서 특정 요소를 클릭 시, 해당 (이미지의)카페 정보가 하단에서 올라옵니다.
+- 화면 상단을 채우는 구글맵 API 기반 지도로 카페의 대략적인 위치를 시각화했습니다.
+- 드래그가 가능한 하단 시트에는 카페 이름, 연락처, 사진들과 카페 메뉴 리스트가 보입니다.
+  - 카페 찜하기 버튼과 카카오맵 URL이 열리는 버튼이 함께 위치해 있습니다.
+- *showModalBottomSheet와 DraggableScrollableSheet로 구현하였습니다.*
+
+### 3. **🖼️ 추천하는 카페 갤러리 탭**
+- 유저가 주로 어떤 카테고리의 카페를 찾아봤는지를 '추천하는 카페' 갤러리에 반영하여 유저의 취향에 맞을 것 같은 카페 사진들을 우선으로 보여줍니다.
+  - 검색 탭에서 각 카테고리의 클릭 수를 기록하여 8개 항목 점수를 합산할 때 가중치로 사용합니다.
+[갤러리 탭](assets/GIFs/마이%20갤러리%20카카오맵.gif)
+
+### 4. **📞 찜한 카페 연락처 탭**
+- 카페 정보 시트에서 유저가 찜한 카페들의 연락처가 보입니다.
+- 통화 버튼 옆에 찜하기 버튼으로 찜 취소도 가능합니다.
+[연락처 탭](assets/GIfs/찜%20전화.gif)
+
+---
+
+## APK 설치 방법 🚀
+Github Releases 내 "first release"의 **app-release.apk**를 참고하세요!
+
+---
+
+## 레퍼런스 📚
+- **📷 카페 사진:** 카카오맵 및 네이버지도
+- **🍴 카페 메뉴:** 카카오맵
+- - **🎨 로고 및 카테고리 아이콘:** Flaticon [author pualalee](https://www.flaticon.com/kr/authors/paulalee)
+---
+
+## 팀원 👥
+
+| 이름  | 소속            | 이메일                  | Github ID                               | 역할                        |  
+|-----|---------------|----------------------|-----------------------------------------|---------------------------|  
+| 이혜리 | KAIST 전산학부    | harriet@kaist.ac.kr  | [hye-ilee](https://github.com/hye-ilee) | UI 디자인, 검색 및 찜 기능 개발 등    |  
+| 조형원 | 서울대학교 전기정보공학부 | dylanhwcho@gmail.com | [dylancho](https://github.com/dylancho) | SQF lite DB 구축, 구글맵 api 등 |  
+
+<br>
