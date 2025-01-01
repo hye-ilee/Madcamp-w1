@@ -28,7 +28,8 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
 
   // Offset to move the marker away from the center
   const double verticalOffset = 0.005; // Adjust this for up/down positioning
-  const double horizontalOffset = 0.000; // Adjust this for left/right positioning
+  const double horizontalOffset =
+      0.000; // Adjust this for left/right positioning
 
   final List<String> cafeImages =
       (cafe['images'] as String).split(',').map((e) => e.trim()).toList();
@@ -66,7 +67,6 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                   },
                 ),
               ),
-
               DraggableScrollableSheet(
                 initialChildSize: 0.5, // Half screen height initially
                 minChildSize: 0.3, // Minimum height
@@ -83,18 +83,14 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                     child: ListView(
                       controller: scrollController,
                       children: [
-                        Text(
-                          cafe['name'],
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 8.0),
-                        Text('Location: ${cafe['location']}'),
-                        const SizedBox(height: 8.0),
-                        Text('Phone: ${cafe['phone']}'),
-                        const SizedBox(height: 16.0),
+                        // Cafe name with the star button aligned
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            Text(
+                              cafe['name'],
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
                             IconButton(
                               icon: Icon(
                                 isFavorite ? Icons.star : Icons.star_border,
@@ -119,6 +115,16 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                                 }
                               },
                             ),
+                          ],
+                        ),
+                        const SizedBox(height: 8.0),
+                        Text('Phone: ${cafe['phone']}'),
+                        const SizedBox(height: 16.0),
+
+                        // Map-related buttons
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
                             TextButton(
                               onPressed: () {
                                 KakaoMapHelper.openKakaoPlaceWithId(
@@ -132,6 +138,7 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                               ),
                               child: const Text('지도 보기'),
                             ),
+                            const SizedBox(width: 8.0),
                             TextButton(
                               onPressed: () {
                                 Navigator.of(context).pop();
@@ -147,6 +154,8 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
                           ],
                         ),
                         const SizedBox(height: 16.0),
+
+                        // Cafe images as a swipable gallery
                         SizedBox(
                           height: 200.0, // Adjust height as needed
                           child: PageView.builder(
@@ -170,11 +179,11 @@ void showCafeInfoPopup(BuildContext context, Map<String, dynamic> cafe) async {
 
                         // Scrollable menu list
                         Text(
-                          'Menus',
+                          '메뉴',
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         const SizedBox(height: 8.0),
-                        Container(
+                        SizedBox(
                           height: 150.0,
                           child: ListView.builder(
                             itemCount: menuList.length,
